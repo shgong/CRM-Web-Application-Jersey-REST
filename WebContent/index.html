@@ -1,0 +1,186 @@
+<html>
+<head>
+ <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+ <title>Customer Relationship Management</title>
+ <link href="styles/styles.css" rel="stylesheet" type="text/css">
+<script src="./js/jquery-1.11.1.js" type="text/javascript"></script>
+  <title>Form to create a new resource</title>
+  
+ <script type="text/javascript">
+
+function getagent() {
+
+	 form_name=$("#inputbox").val();
+	 form_type=$("#searchtype").val();
+
+     jQuery.ajax({
+         type: "GET",
+         url: "rest/"+form_type+"/" + form_name,
+         contentType: "application/json; charset=utf-8",
+         dataType: "html",
+         success: function (data, status, jqXHR) {
+        		$("#display").html(data);
+        		form_name=$("#inputbox").val("");
+         },
+
+         error: function (jqXHR, status) {
+        	 $("#display").html("Could not retrieve data, Error"+status);
+         }
+         })
+
+};
+ 
+
+
+function newagent()
+{
+
+
+	 form_name=$("#inputbox").val();
+	 form_phone=$("#inputphone").val();
+	 form_email=$("#inputemail").val();
+	 form_type=$("#searchtype").val();
+	 var formData = {name:form_name,phone:form_phone,email:form_email}; //Array 
+	 
+	 $.ajax({
+	     url : "rest/"+form_type+"/",
+	     type: "POST",
+	     data : formData,
+	     success: function(data, textStatus, jqXHR)
+	     {
+	    	 $("#display").html(form_type+" Created");
+	    	 
+	    	 form_name=$("#inputbox").val("");
+	    	 form_phone=$("#inputphone").val("");
+	    	 form_email=$("#inputemail").val("");
+	     },
+	     
+	     error: function (jqXHR, textStatus, errorThrown)
+	     {
+	    	 $("#display").html("Create Failed");
+	     }
+	 });
+	 
+}
+
+function updateagent()
+{
+
+
+	 form_name=$("#inputbox").val();
+	 form_phone=$("#inputphone").val();
+	 form_email=$("#inputemail").val();
+	 form_type=$("#searchtype").val();
+	 var formData = {name:form_name,phone:form_phone,email:form_email}; //Array 
+	 
+	 $.ajax({
+	     url : "rest/"+form_type+"/",
+	     type: "PUT",
+	     data : formData,
+	     success: function(data, textStatus, jqXHR)
+	     {
+	    	 $("#display").html(form_type+" Updated");
+	    	 
+	    	 form_name=$("#inputbox").val("");
+	    	 form_phone=$("#inputphone").val("");
+	    	 form_email=$("#inputemail").val("");
+	     },
+	     
+	     error: function (jqXHR, textStatus, errorThrown)
+	     {
+	    	 $("#display").html("Update Failed");
+	     }
+	 });
+	 
+}
+
+
+
+function deleteagent()
+{
+
+	 form_name=$("#inputbox").val();
+	 form_type=$("#searchtype").val();
+
+     jQuery.ajax({
+         type: "DELETE",
+         url: "rest/"+form_type+"/" + form_name,
+         contentType: "application/json; charset=utf-8",
+         dataType: "html",
+         success: function (data, status, jqXHR) {
+        		$("#display").html(form_type+" Deleted ");
+        		form_name=$("#inputbox").val("");
+         },
+
+         error: function (jqXHR, status) {
+        	 $("#display").html("Delete Failed");
+         }
+         })
+
+};
+
+
+function changeform(){
+	if($("#searchtype").val()=="Contact"){
+		$('#formperson').hide();
+		$('#formcontact').show();		
+	}
+	else
+	{
+		$('#formperson').show();
+		$('#formcontact').hide();			
+	}
+	
+	
+	
+}
+ 
+
+</script>
+</head>
+
+ 
+ 
+
+<body>
+<img src="images/logo.png" height="200" width="445">
+<br><br>
+ 
+<select onchange="javascript:changeform()" id="searchtype" >
+  <option value="customer">Customer</option>
+  <option value="Agent">Agent</option>
+  <option value="Contact">Contact</option>
+</select>
+ <br><br>
+ 
+ <div class="hide" id="formperson">
+ Name: <input id="inputbox" /><br><br>
+ Phone: <input id="inputphone" /><br><br>
+ Email: <input id="inputemail" /><br><br>
+ 
+<a class="item" href="javascript:getagent();">Retrieve</a>
+<a class="item" href="javascript:newagent();">Create</a>
+<a class="item" href="javascript:updateagent();">Update</a>
+<a class="item" href="javascript:deleteagent();">Delete</a>
+ </div>
+ 
+
+ <div class="hide" id="formcontact">
+ Customer: <input id="inputcus" /><br><br>
+ Agent: <input id="inputagent" /><br><br>
+ Model: <input id="inputmodel" /><br><br>
+ Summary: <input id="inputsummary" /><br><br>
+ 
+ <a class="item" href="javascript:getagent();">Retrieve</a>
+ <a class="item" href="javascript:newcon();">Create</a>
+ <a class="item" href="javascript:deletecon();">Delete</a>
+ </div>
+ 
+ 
+
+  <br>
+  
+  <div id="display"></div>
+  
+</body>
+</html> 
